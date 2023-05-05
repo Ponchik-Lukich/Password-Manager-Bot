@@ -8,7 +8,7 @@ import (
 )
 
 func handleStart(update *tgbotapi.Update) {
-	chatID := update.CallbackQuery.Message.Chat.ID
+	chatID := update.Message.Chat.ID
 	err := database.AddUser(models.User{ChatID: chatID})
 	if err != nil {
 		log.Fatal(err)
