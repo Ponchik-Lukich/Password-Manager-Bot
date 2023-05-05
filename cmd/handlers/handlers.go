@@ -26,12 +26,6 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			log.Fatal(err)
 		}
 		switch user.State {
-		case "wait":
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-			msg.ReplyMarkup = inlineKeyboard
-			if _, err := bot.Send(msg); err != nil {
-				panic(err)
-			}
 		case "get":
 			handleGetServiceName(bot, update)
 		default:
@@ -43,7 +37,11 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleUnknownCommand(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	sendMessage(bot, update.Message.Chat.ID, "I don't understand this command.\nMenu:\n")
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "I don't understand your command(")
+	msg.ReplyMarkup = inlineKeyboard
+	if _, err := bot.Send(msg); err != nil {
+		panic(err)
+	}
 }
 
 func sendMessage(bot *tgbotapi.BotAPI, chatID int64, text string, replyToMessageIDs ...int) {
