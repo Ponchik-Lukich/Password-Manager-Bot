@@ -14,7 +14,6 @@ func handleMenu(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		),
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData("Del", "del"),
-			tgbotapi.NewInlineKeyboardButtonData("Start", "start"),
 		),
 	)
 
