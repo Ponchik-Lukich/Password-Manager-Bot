@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"password-manager/internal/handlers"
+	"password-manager/cmd/handlers"
 )
 
 func RunBot(botToken string, w http.ResponseWriter, r *http.Request) {
