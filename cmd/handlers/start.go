@@ -7,7 +7,7 @@ import (
 	"password-manager/cmd/models"
 )
 
-func handleStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+func handleStart(update *tgbotapi.Update) {
 	chatID := update.CallbackQuery.Message.Chat.ID
 	err := database.AddUser(models.User{ChatID: chatID})
 	if err != nil {

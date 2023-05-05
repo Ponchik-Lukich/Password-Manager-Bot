@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
+	"log"
+	"password-manager/cmd/database"
 )
 
 var inlineKeyboard = tgbotapi.NewInlineKeyboardMarkup(
@@ -16,13 +18,24 @@ var inlineKeyboard = tgbotapi.NewInlineKeyboardMarkup(
 
 func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	if update.Message != nil {
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-		msg.ReplyMarkup = inlineKeyboard
-		//if update.Message.IsCommand() && update.Message.Command() == "start" {
-		//	handleStart(bot, update)
-		//}
-		if _, err := bot.Send(msg); err != nil {
-			panic(err)
+		if update.Message.IsCommand() && update.Message.Command() == "start" {
+			handleStart(update)
+		}
+		user, err := database.GetUser(update.Message.Chat.ID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		switch user.State {
+		case "wait":
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
+			msg.ReplyMarkup = inlineKeyboard
+			if _, err := bot.Send(msg); err != nil {
+				panic(err)
+			}
+		case "get":
+			handleGetServiceName(bot, update)
+		default:
+			handleUnknownCommand(bot, update)
 		}
 	} else if update.CallbackQuery != nil {
 		handleCallbackQuery(bot, update)
@@ -30,7 +43,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleUnknownCommand(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	sendMessage(bot, update.Message.Chat.ID, "I don't understand this command.")
+	sendMessage(bot, update.Message.Chat.ID, "I don't understand this command.\nMenu:\n")
 }
 
 func sendMessage(bot *tgbotapi.BotAPI, chatID int64, text string, replyToMessageIDs ...int) {
