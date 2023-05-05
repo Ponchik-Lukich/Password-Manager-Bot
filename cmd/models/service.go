@@ -1,7 +1,7 @@
 package models
 
 type Service struct {
-	ID         int64  `json:"id"`
+	ID         int64  `json:"id,omitempty"`
 	Name       string `json:"name"`
 	Login      string `json:"login"`
 	Password   string `json:"password"`

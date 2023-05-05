@@ -15,12 +15,11 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	}
 }
 
-func handleGetServiceName(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	serviceName := update.Message.Text
 	service, err := database.GetService(serviceName)
 	if err != nil {
-		sendMessage(bot, update.Message.Chat.ID, "I have error")
-		if err.Error() == "not found" {
+		if err.Error() == "no rows in result set" {
 			sendMessage(bot, update.Message.Chat.ID, "Service not found")
 			err := database.SetUserState(update.Message.Chat.ID, "wait")
 			if err == nil {
@@ -35,7 +34,6 @@ func handleGetServiceName(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		}
 		return
 	}
-	sendMessage(bot, update.Message.Chat.ID, "I dont have error")
 	response := fmt.Sprintf("Service: %s\nLogin: %s\nPassword: %s", service.Name, service.Login, service.Password)
 	sendMessage(bot, update.Message.Chat.ID, response)
 	err = database.SetUserState(update.Message.Chat.ID, "wait")

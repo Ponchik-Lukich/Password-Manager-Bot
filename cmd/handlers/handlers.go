@@ -27,7 +27,9 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		}
 		switch user.State {
 		case "get":
-			handleGetServiceName(bot, update)
+			handleGetService(bot, update)
+		case "set":
+			handleSetService(bot, update)
 		default:
 			handleUnknownCommand(bot, update)
 		}
@@ -37,7 +39,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleUnknownCommand(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "I don't understand your command:(\nHere is my command list:")
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Here is my command list:")
 	msg.ReplyMarkup = inlineKeyboard
 	if _, err := bot.Send(msg); err != nil {
 		panic(err)
