@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"os"
 	"password-manager/cmd/bot"
-	"password-manager/internal/database"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -13,10 +12,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		panic("Bot token is required")
 	}
 
-	err := database.Connect()
-	if err != nil {
-		panic("Could not connect to database")
-	}
+	//err := database.Connect()
+	//if err != nil {
+	//	panic("Could not connect to database")
+	//}
 
 	bot.RunBot(botToken, w, r)
 }
