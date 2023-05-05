@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"password-manager/internal/models"
+	"password-manager/cmd/models"
 )
 
 func AddUser(user models.User) error {

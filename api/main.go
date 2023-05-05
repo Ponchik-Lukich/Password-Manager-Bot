@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"password-manager/cmd/bot"
-	"password-manager/internal/database"
+	"password-manager/cmd/database"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {

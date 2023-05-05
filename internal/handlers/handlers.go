@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
-	"password-manager/internal/database"
-	"password-manager/internal/models"
+	"password-manager/cmd/database"
+	"password-manager/cmd/models"
 )
 
 func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
