@@ -12,5 +12,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		panic("Bot token is required")
 	}
 
-	bot.RunBot(botToken)
+	bot.RunBot(botToken, w, r)
 }

@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"log"
-
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -11,10 +9,11 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		return
 	}
 
-	log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Hello, I'm your bot!")
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 	msg.ReplyToMessageID = update.Message.MessageID
+	_, err := bot.Send(msg)
+	if err != nil {
+		return
+	}
 
-	bot.Send(msg)
 }
