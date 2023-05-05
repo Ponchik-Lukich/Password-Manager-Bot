@@ -17,21 +17,29 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 
 func handleGetServiceName(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	serviceName := update.Message.Text
-	err := database.SetUserState(update.Message.Chat.ID, "wait")
-	if err == nil {
-		log.Fatal(err)
-	}
 	service, err := database.GetService(serviceName)
 	if err != nil {
 		sendMessage(bot, update.Message.Chat.ID, "I have error")
 		if err.Error() == "not found" {
 			sendMessage(bot, update.Message.Chat.ID, "Service not found")
+			err := database.SetUserState(update.Message.Chat.ID, "wait")
+			if err == nil {
+				log.Fatal(err)
+			}
 			return
 		}
 		sendMessage(bot, update.Message.Chat.ID, "Error retrieving service ("+err.Error()+")")
+		err := database.SetUserState(update.Message.Chat.ID, "wait")
+		if err == nil {
+			log.Fatal(err)
+		}
 		return
 	}
 	sendMessage(bot, update.Message.Chat.ID, "I dont have error")
 	response := fmt.Sprintf("Service: %s\nLogin: %s\nPassword: %s", service.Name, service.Login, service.Password)
 	sendMessage(bot, update.Message.Chat.ID, response)
+	err = database.SetUserState(update.Message.Chat.ID, "wait")
+	if err == nil {
+		log.Fatal(err)
+	}
 }
