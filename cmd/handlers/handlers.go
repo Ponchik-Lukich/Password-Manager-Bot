@@ -37,7 +37,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleUnknownCommand(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "I don't understand your command(")
+	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "I don't understand your command:(\nHere is my command list:")
 	msg.ReplyMarkup = inlineKeyboard
 	if _, err := bot.Send(msg); err != nil {
 		panic(err)
