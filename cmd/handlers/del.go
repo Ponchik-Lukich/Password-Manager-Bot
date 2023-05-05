@@ -5,5 +5,5 @@ import (
 )
 
 func handleDel(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	sendMessage(bot, update.Message.Chat.ID, "Del command")
+	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Del command")
 }

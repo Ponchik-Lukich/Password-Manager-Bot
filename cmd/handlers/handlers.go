@@ -30,7 +30,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleUnknownCommand(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	sendMessage(bot, update.Message.Chat.ID, "I don't understand this command.", update.Message.MessageID)
+	sendMessage(bot, update.Message.Chat.ID, "I don't understand this command.")
 }
 
 func sendMessage(bot *tgbotapi.BotAPI, chatID int64, text string, replyToMessageIDs ...int) {
