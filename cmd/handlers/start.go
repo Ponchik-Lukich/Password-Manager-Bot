@@ -1,4 +1,4 @@
-package commands
+package handlers
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -7,12 +7,12 @@ import (
 	"password-manager/cmd/models"
 )
 
-func HandleStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+func handleStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	chatID := update.Message.Chat.ID
 	err := database.AddUser(models.User{ChatID: chatID})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	HandleMenu(bot, update)
+	handleMenu(bot, update)
 }

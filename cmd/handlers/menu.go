@@ -1,10 +1,10 @@
-package commands
+package handlers
 
 import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func HandleMenu(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+func handleMenu(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	chatID := update.Message.Chat.ID
 
 	inlineKeyboard := tgbotapi.NewInlineKeyboardMarkup(
