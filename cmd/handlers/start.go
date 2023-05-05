@@ -13,6 +13,4 @@ func handleStart(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	handleMenu(bot, update)
 }

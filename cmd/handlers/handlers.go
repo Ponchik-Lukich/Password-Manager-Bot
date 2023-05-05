@@ -18,9 +18,9 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	if update.Message != nil {
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
 		msg.ReplyMarkup = inlineKeyboard
-		if update.Message.IsCommand() && update.Message.Command() == "start" {
-			handleStart(bot, update)
-		}
+		//if update.Message.IsCommand() && update.Message.Command() == "start" {
+		//	handleStart(bot, update)
+		//}
 		if _, err := bot.Send(msg); err != nil {
 			panic(err)
 		}
@@ -40,15 +40,20 @@ func sendMessage(bot *tgbotapi.BotAPI, chatID int64, text string, replyToMessage
 }
 
 func handleCallbackQuery(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	callbackQuery := update.CallbackQuery
-	switch callbackQuery.Data {
-	case "get":
-		handleGet(bot, update)
-	case "set":
-		handleSet(bot, update)
-	case "del":
-		handleDel(bot, update)
-	default:
-		handleUnknownCommand(bot, update)
+	//callbackQuery := update.CallbackQuery
+	//switch callbackQuery.Data {
+	//case "get":
+	//	handleGet(bot, update)
+	//case "set":
+	//	handleSet(bot, update)
+	//case "del":
+	//	handleDel(bot, update)
+	//default:
+	//	handleUnknownCommand(bot, update)
+	//}
+	callback := tgbotapi.NewCallback(update.CallbackQuery.ID, update.CallbackQuery.Data+" command")
+	if _, err := bot.AnswerCallbackQuery(callback); err != nil {
+		panic(err)
 	}
+
 }
