@@ -5,5 +5,5 @@ import (
 )
 
 func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	sendMessage(bot, update.Message.Chat.ID, "Get command", update.Message.MessageID)
+	sendMessage(bot, update.Message.Chat.ID, "Get command")
 }
