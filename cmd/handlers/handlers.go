@@ -44,16 +44,8 @@ func handleUnknownCommand(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Here is my command list:")
 	msg.ReplyMarkup = inlineKeyboard
 	if _, err := bot.Send(msg); err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
-}
-
-func sendMessage(bot *tgbotapi.BotAPI, chatID int64, text string, replyToMessageIDs ...int) {
-	msg := tgbotapi.NewMessage(chatID, text)
-	for _, replyToMessageID := range replyToMessageIDs {
-		msg.ReplyToMessageID = replyToMessageID
-	}
-	bot.Send(msg)
 }
 
 func handleCallbackQuery(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
@@ -66,5 +58,24 @@ func handleCallbackQuery(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		handleDel(bot, update)
 	default:
 		handleUnknownCommand(bot, update)
+	}
+}
+
+func sendMessage(bot *tgbotapi.BotAPI, chatID int64, text string, replyToMessageIDs ...int) {
+	msg := tgbotapi.NewMessage(chatID, text)
+	for _, replyToMessageID := range replyToMessageIDs {
+		msg.ReplyToMessageID = replyToMessageID
+	}
+	_, err := bot.Send(msg)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func deleteMessage(bot *tgbotapi.BotAPI, chatID int64, messageID int) {
+	deleteConfig := tgbotapi.NewDeleteMessage(chatID, messageID)
+	_, err := bot.DeleteMessage(deleteConfig)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

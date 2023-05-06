@@ -5,6 +5,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"password-manager/cmd/database"
+	"time"
 )
 
 func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
@@ -34,9 +35,14 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			return
 		}
 	} else {
-		response := fmt.Sprintf("Service: %s\nLogin: %s\nPassword: %s", service.Name, service.Login, service.Password)
-		sendMessage(bot, update.Message.Chat.ID, response)
+		response := fmt.Sprintf("This message would be deleted after minute:\nService: %s\nLogin: %s\nPassword: "+
+			"%s", service.Name, service.Login, service.Password)
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
+		sentMessage, _ := bot.Send(msg)
 		err = database.SetUserState(update.Message.Chat.ID, "wait")
+		time.AfterFunc(time.Minute, func() {
+			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
+		})
 		if err == nil {
 			log.Fatal(err)
 		}
