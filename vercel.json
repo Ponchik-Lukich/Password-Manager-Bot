@@ -15,6 +15,7 @@
   "env": {
     "TELEGRAM_BOT_TOKEN": "@telegram_bot_token",
     "TELEGRAM_WEBHOOK_URL": "@telegram_webhook_url",
-    "DATABASE_URL": "@database_url"
+    "DATABASE_URL": "@database_url",
+    "ENCRYPT_KEY": "@encrypt_key"
   }
 }

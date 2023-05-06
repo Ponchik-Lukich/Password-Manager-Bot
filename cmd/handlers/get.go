@@ -5,6 +5,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"password-manager/cmd/database"
+	"password-manager/cmd/utils"
 )
 
 func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
@@ -40,8 +41,16 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		handleUnknownCommand(bot, update)
 		return
 	} else {
+		login, err := utils.Decrypt(service.Login)
+		if err != nil {
+			log.Print("decrypt error: ", err)
+		}
+		password, err := utils.Decrypt(service.Password)
+		if err != nil {
+			log.Print("decrypt error: ", err)
+		}
 		response := fmt.Sprintf("Your credentials:\nService: %s\nLogin: %s\nPassword: %s\nType any word to delete "+
-			"this message", service.Name, service.Login, service.Password)
+			"this message", service.Name, login, password)
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		sentMessage, _ := bot.Send(msg)
 		err = database.SetUserState(update.Message.Chat.ID, "wait_delete", sentMessage.MessageID)
