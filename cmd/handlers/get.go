@@ -18,11 +18,6 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 
 func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
-	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
-	if err != nil {
-		log.Print(err)
-	}
-	handleUnknownCommand(bot, update)
 }
 
 func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
@@ -50,6 +45,11 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		}
 		time.AfterFunc(time.Second*1, func() {
 			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
+			err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
+			if err != nil {
+				log.Print(err)
+			}
+			handleUnknownCommand(bot, update)
 		})
 		return
 	}

@@ -2,27 +2,23 @@ package utils
 
 import (
 	"errors"
-	"log"
 	"password-manager/cmd/models"
-	"strings"
+	"regexp"
 )
 
 func ValidateService(credentials string, user int64) (models.Service, error) {
 	var name, login, password string
-	name = credentials[:strings.Index(credentials, ":")]
-	if name == "" {
-		log.Print("name is empty")
-		return models.Service{}, errors.New("name is empty")
+	re := regexp.MustCompile(`^(\w+):(\w+):(\w+)$`)
+	if !re.MatchString(credentials) {
+		return models.Service{}, errors.New("invalid service credentials")
+	} else {
+		matches := re.FindStringSubmatch(credentials)
+		name = matches[1]
+		login = matches[2]
+		password = matches[3]
 	}
-	login = credentials[strings.Index(credentials, ":")+1 : strings.LastIndex(credentials, ":")]
-	if login == "" {
-		log.Print("login is empty")
-		return models.Service{}, errors.New("login is empty")
-	}
-	password = credentials[strings.LastIndex(credentials, ":")+1:]
-	if password == "" {
-		log.Print("password is empty")
-		return models.Service{}, errors.New("password is empty")
+	if len(name) > 255 || len(login) > 255 || len(password) > 255 {
+		return models.Service{}, errors.New("service credentials are too long")
 	}
 	return models.Service{Name: name, Login: login, Password: password, UserChatID: user}, nil
 }
