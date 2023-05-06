@@ -11,7 +11,7 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Enter service name:")
 	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "get")
 	if err != nil {
-		log.Print(err)
+		log.Print("user state change error: ", err)
 	}
 }
 
@@ -20,7 +20,7 @@ func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update, messageID i
 	deleteMessage(bot, update.Message.Chat.ID, messageID)
 	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
 	if err != nil {
-		log.Print(err)
+		log.Print("user state change error: ", err)
 	}
 	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
 	handleUnknownCommand(bot, update)
@@ -36,7 +36,7 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		}
 		err = database.SetUserState(update.Message.Chat.ID, "wait")
 		if err != nil {
-			log.Print(err)
+			log.Print("user state change error: ", err)
 		}
 		handleUnknownCommand(bot, update)
 		return
@@ -47,7 +47,7 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		sentMessage, _ := bot.Send(msg)
 		err = database.SetUserState(update.Message.Chat.ID, "wait_delete", sentMessage.MessageID)
 		if err == nil {
-			log.Print(err)
+			log.Print("user state change error: ", err)
 		}
 		return
 	}

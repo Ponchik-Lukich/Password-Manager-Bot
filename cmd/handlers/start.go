@@ -13,5 +13,4 @@ func handleStart(update *tgbotapi.Update) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

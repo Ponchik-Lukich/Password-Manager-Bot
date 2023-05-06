@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"log"
 	"password-manager/cmd/models"
 )
 
@@ -16,6 +17,7 @@ func AddService(service models.Service) error {
 }
 
 func GetService(serviceName string, user int64) (models.Service, error) {
+	log.Print("Getting service...")
 	var service models.Service
 	query := `SELECT * FROM services WHERE name = $1 AND user_chat_id = $2`
 	err := pool.QueryRow(context.Background(), query, serviceName, user).Scan(&service.ID, &service.Name, &service.Login, &service.Password, &service.UserChatID)
