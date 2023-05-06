@@ -48,7 +48,6 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		if err == nil {
 			log.Print(err)
 		}
-		handleUnknownCommand(bot, update)
 		time.AfterFunc(time.Second*1, func() {
 			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
 		})
