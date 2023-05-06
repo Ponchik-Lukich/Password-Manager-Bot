@@ -12,7 +12,7 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Enter service name:")
 	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "get")
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 }
 
@@ -21,19 +21,14 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	if err != nil {
 		if err.Error() == "no rows in result set" {
 			sendMessage(bot, update.Message.Chat.ID, "Service not found")
-			err := database.SetUserState(update.Message.Chat.ID, "wait")
-			if err == nil {
-				log.Fatal(err)
-			}
-			return
 		} else {
 			sendMessage(bot, update.Message.Chat.ID, "Error retrieving service ("+err.Error()+")")
-			err := database.SetUserState(update.Message.Chat.ID, "wait")
-			if err == nil {
-				log.Fatal(err)
-			}
-			return
 		}
+		err = database.SetUserState(update.Message.Chat.ID, "wait")
+		if err != nil {
+			log.Print(err)
+		}
+		return
 	} else {
 		response := fmt.Sprintf("This message would be deleted after minute:\nService: %s\nLogin: %s\nPassword: "+
 			"%s", service.Name, service.Login, service.Password)
@@ -45,7 +40,7 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		})
 		err = database.SetUserState(update.Message.Chat.ID, "wait")
 		if err == nil {
-			log.Fatal(err)
+			log.Print(err)
 		}
 		return
 	}
