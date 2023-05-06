@@ -8,7 +8,7 @@ import (
 )
 
 func handleSet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Enter service credentials in format:\n<service name>:<login>:<password>")
+	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Enter service credentials in format:\n<service name> <login> <password>")
 	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "set")
 	if err != nil {
 		log.Print(err)

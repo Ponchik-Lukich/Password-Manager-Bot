@@ -9,7 +9,7 @@ import (
 func ValidateService(credentials string, user int64) (models.Service, error) {
 	var name, login, password string
 	println("Validating service...")
-	re := regexp.MustCompile(`^(\w+):(\w+):(\w+)$`)
+	re := regexp.MustCompile(`^(\w+) (\w+) (\w+)$`)
 	if !re.MatchString(credentials) {
 		return models.Service{}, errors.New("invalid service credentials")
 	} else {
@@ -18,7 +18,7 @@ func ValidateService(credentials string, user int64) (models.Service, error) {
 		login = matches[2]
 		password = matches[3]
 	}
-	if len(name) > 255 || len(login) > 255 || len(password) > 255 {
+	if len(name) > 255 || len(login) > 255 || len(password) > 255 || len(name) == 0 || len(login) == 0 || len(password) == 0 {
 		return models.Service{}, errors.New("service credentials are too long")
 	}
 	return models.Service{Name: name, Login: login, Password: password, UserChatID: user}, nil

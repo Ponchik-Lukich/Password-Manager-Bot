@@ -16,7 +16,6 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update, messageID int) {
-	sendMessage(bot, update.Message.Chat.ID, "Credentials were hidden")
 	deleteMessage(bot, update.Message.Chat.ID, messageID)
 	err := database.SetUserState(update.Message.Chat.ID, "wait")
 	if err != nil {

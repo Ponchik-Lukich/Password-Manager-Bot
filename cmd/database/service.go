@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"log"
 	"password-manager/cmd/models"
 )
@@ -26,6 +27,16 @@ func GetService(serviceName string, user int64) (models.Service, error) {
 
 func DeleteService(serviceName string, user int64) error {
 	query := `DELETE FROM services WHERE name = $1 AND user_chat_id = $2`
-	_, err := pool.Exec(context.Background(), query, serviceName, user)
-	return err
+	result, err := pool.Exec(context.Background(), query, serviceName, user)
+	if err != nil {
+		return err
+	}
+
+	affectedRows := result.RowsAffected()
+
+	if affectedRows == 0 {
+		return errors.New("service not found")
+	}
+
+	return nil
 }
