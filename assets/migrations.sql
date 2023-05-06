@@ -19,3 +19,5 @@ CREATE TABLE IF NOT EXISTS services
     PRIMARY KEY (id),
     FOREIGN KEY (user_chat_id) REFERENCES users (chat_id)
 );
+
+ALTER TABLE services ADD CONSTRAINT unique_name_user_chat_id UNIQUE (name, user_chat_id);

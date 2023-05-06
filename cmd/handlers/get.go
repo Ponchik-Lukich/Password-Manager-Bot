@@ -16,6 +16,15 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	}
 }
 
+func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
+	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
+	if err != nil {
+		log.Print(err)
+	}
+	handleUnknownCommand(bot, update)
+}
+
 func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	service, err := database.GetService(update.Message.Text, update.Message.Chat.ID)
 	if err != nil {
@@ -31,20 +40,18 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		handleUnknownCommand(bot, update)
 		return
 	} else {
-		response := fmt.Sprintf("This message would be deleted after minute:\nService: %s\nLogin: %s\nPassword: "+
-			"%s", service.Name, service.Login, service.Password)
+		response := fmt.Sprintf("Your credentials:\nService: %s\nLogin: %s\nPassword: %s\nType any word to delete "+
+			"this message", service.Name, service.Login, service.Password)
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		sentMessage, _ := bot.Send(msg)
-		time.AfterFunc(time.Minute, func() {
-			println("Deleting: ", sentMessage.MessageID)
-			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
-		})
-		err = database.SetUserState(update.Message.Chat.ID, "wait")
+		err = database.SetUserState(update.Message.Chat.ID, "wait_delete")
 		if err == nil {
 			log.Print(err)
 		}
 		handleUnknownCommand(bot, update)
+		time.AfterFunc(time.Second*1, func() {
+			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
+		})
 		return
 	}
-
 }
