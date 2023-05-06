@@ -6,7 +6,12 @@ import (
 )
 
 func AddService(service models.Service) error {
-	_, err := pool.Exec(context.Background(), "INSERT INTO services (name, login, password, user_chat_id) VALUES ($1, $2, $3, $4) ON CONFLICT DO NOTHING/UPDATE", service.Name, service.Login, service.Password, service.UserChatID)
+	_, err := pool.Exec(context.Background(), "INSERT INTO services (name, login, password, user_chat_id)"+
+		"VALUES ($1, $2, $3, $4)"+
+		"ON CONFLICT (name, user_chat_id)"+
+		"DO UPDATE SET"+
+		"  login = EXCLUDED.login,"+
+		"  password = EXCLUDED.password;", service.Name, service.Login, service.Password, service.UserChatID)
 	return err
 }
 
