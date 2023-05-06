@@ -16,14 +16,13 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update, messageID int) {
-	log.Print("Deleting message...")
-	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
+	sendMessage(bot, update.Message.Chat.ID, "Credentials were hidden")
 	deleteMessage(bot, update.Message.Chat.ID, messageID)
-	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
+	err := database.SetUserState(update.Message.Chat.ID, "wait")
 	if err != nil {
 		log.Print("user state change error: ", err)
 	}
-	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
+	sendMessage(bot, update.Message.Chat.ID, "Credentials were hidden")
 	handleUnknownCommand(bot, update)
 }
 
