@@ -21,7 +21,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		if update.Message.IsCommand() && update.Message.Command() == "start" {
 			handleStart(update)
 		}
-		user, err := database.GetUser(update.Message.Chat.ID, true)
+		user, err := database.GetUser(update.Message.Chat.ID)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -10,16 +10,10 @@ func AddUser(user models.User) error {
 	return err
 }
 
-func GetUser(userId int64, withMessage bool) (models.User, error) {
+func GetUser(userId int64) (models.User, error) {
 	var user models.User
-	var err error
-	if withMessage {
-		query := `SELECT chat_id, state, message_id FROM users WHERE chat_id = $1`
-		err = pool.QueryRow(context.Background(), query, userId).Scan(&user.ChatID, &user.State, &user.MessageID)
-	} else {
-		query := `SELECT chat_id, state FROM users WHERE chat_id = $1`
-		err = pool.QueryRow(context.Background(), query, userId).Scan(&user.ChatID, &user.State)
-	}
+	query := `SELECT * FROM users WHERE chat_id = $1`
+	err := pool.QueryRow(context.Background(), query, userId).Scan(&user.ChatID, &user.State, &user.MessageID)
 	return user, err
 }
 
