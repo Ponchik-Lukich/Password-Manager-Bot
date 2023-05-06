@@ -21,3 +21,9 @@ func GetService(serviceName string) (models.Service, error) {
 	err := pool.QueryRow(context.Background(), query, serviceName).Scan(&service.ID, &service.Name, &service.Login, &service.Password, &service.UserChatID)
 	return service, err
 }
+
+func DeleteService(serviceName string, user int64) error {
+	query := `DELETE FROM services WHERE name = $1 AND user_chat_id = $2`
+	_, err := pool.Exec(context.Background(), query, serviceName, user)
+	return err
+}

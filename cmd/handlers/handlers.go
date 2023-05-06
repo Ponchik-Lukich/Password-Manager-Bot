@@ -30,6 +30,8 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			handleGetService(bot, update)
 		case "set":
 			handleSetService(bot, update)
+		case "del":
+			handleDelService(bot, update)
 		default:
 			handleUnknownCommand(bot, update)
 		}

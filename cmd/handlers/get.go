@@ -33,11 +33,14 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			log.Fatal(err)
 		}
 		return
+	} else {
+		response := fmt.Sprintf("Service: %s\nLogin: %s\nPassword: %s", service.Name, service.Login, service.Password)
+		sendMessage(bot, update.Message.Chat.ID, response)
+		err = database.SetUserState(update.Message.Chat.ID, "wait")
+		if err == nil {
+			log.Fatal(err)
+		}
+		return
 	}
-	response := fmt.Sprintf("Service: %s\nLogin: %s\nPassword: %s", service.Name, service.Login, service.Password)
-	sendMessage(bot, update.Message.Chat.ID, response)
-	err = database.SetUserState(update.Message.Chat.ID, "wait")
-	if err == nil {
-		log.Fatal(err)
-	}
+
 }
