@@ -15,8 +15,7 @@ func handleDel(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 }
 
 func handleDelService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
-	serviceName := update.Message.Text
-	err := database.DeleteService(serviceName, update.Message.Chat.ID)
+	err := database.DeleteService(update.Message.Text, update.Message.Chat.ID)
 	if err != nil {
 		sendMessage(bot, update.Message.Chat.ID, "Error deleting service ("+err.Error()+")")
 		err := database.SetUserState(update.Message.Chat.ID, "wait")
