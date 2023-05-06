@@ -18,6 +18,7 @@ func handleSet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 func handleSetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	serviceCredentials := update.Message.Text
 	service, err := utils.ValidateService(serviceCredentials, update.Message.Chat.ID)
+	sendMessage(bot, update.Message.Chat.ID, "Validating service..."+service.Name+" "+service.Login+" "+service.Password)
 	if err != nil {
 		sendMessage(bot, update.Message.Chat.ID, err.Error())
 		err := database.SetUserState(update.Message.Chat.ID, "wait")
