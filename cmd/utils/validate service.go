@@ -8,6 +8,7 @@ import (
 
 func ValidateService(credentials string, user int64) (models.Service, error) {
 	var name, login, password string
+	println("Validating service...")
 	re := regexp.MustCompile(`^(\w+):(\w+):(\w+)$`)
 	if !re.MatchString(credentials) {
 		return models.Service{}, errors.New("invalid service credentials")
