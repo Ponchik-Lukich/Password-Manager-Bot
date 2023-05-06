@@ -39,10 +39,11 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			"%s", service.Name, service.Login, service.Password)
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		sentMessage, _ := bot.Send(msg)
-		err = database.SetUserState(update.Message.Chat.ID, "wait")
+		println("Message ID: ", sentMessage.MessageID)
 		time.AfterFunc(time.Minute, func() {
 			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
 		})
+		err = database.SetUserState(update.Message.Chat.ID, "wait")
 		if err == nil {
 			log.Fatal(err)
 		}
