@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 	"password-manager/cmd/models"
-	"password-manager/cmd/utils"
 )
 
 func AddService(service models.Service) error {
@@ -27,12 +26,8 @@ func GetService(serviceName string, user int64) (models.Service, error) {
 }
 
 func DeleteService(serviceName string, user int64) error {
-	name, err := utils.Encrypt(serviceName)
-	if err != nil {
-		return err
-	}
 	query := `DELETE FROM services WHERE name = $1 AND user_chat_id = $2`
-	result, err := pool.Exec(context.Background(), query, name, user)
+	result, err := pool.Exec(context.Background(), query, serviceName, user)
 	if err != nil {
 		return err
 	}
