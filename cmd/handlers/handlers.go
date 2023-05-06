@@ -33,6 +33,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		case "del":
 			handleDelService(bot, update)
 		case "wait_delete":
+			println("wait_delete")
 			handleWaitDelete(bot, update, user.MessageID)
 		default:
 			handleUnknownCommand(bot, update)
