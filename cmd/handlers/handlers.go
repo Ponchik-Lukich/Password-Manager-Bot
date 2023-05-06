@@ -21,7 +21,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		if update.Message.IsCommand() && update.Message.Command() == "start" {
 			handleStart(update)
 		}
-		user, err := database.GetUser(update.Message.Chat.ID)
+		user, err := database.GetUser(update.Message.Chat.ID, true)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -33,7 +33,7 @@ func HandleUpdate(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		case "del":
 			handleDelService(bot, update)
 		case "wait_delete":
-			handleWaitDelete(bot, update)
+			handleWaitDelete(bot, update, user.MessageID)
 		default:
 			handleUnknownCommand(bot, update)
 		}

@@ -5,7 +5,6 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"password-manager/cmd/database"
-	"time"
 )
 
 func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
@@ -16,8 +15,15 @@ func handleGet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	}
 }
 
-func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
+func handleWaitDelete(bot *tgbotapi.BotAPI, update *tgbotapi.Update, messageID int) {
 	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
+	deleteMessage(bot, update.Message.Chat.ID, messageID)
+	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
+	if err != nil {
+		log.Print(err)
+	}
+	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Credentials were hidden")
+	handleUnknownCommand(bot, update)
 }
 
 func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
@@ -39,18 +45,10 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			"this message", service.Name, service.Login, service.Password)
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		sentMessage, _ := bot.Send(msg)
-		err = database.SetUserState(update.Message.Chat.ID, "wait_delete")
+		err = database.SetUserState(update.Message.Chat.ID, "wait_delete", sentMessage.MessageID)
 		if err == nil {
 			log.Print(err)
 		}
-		time.AfterFunc(time.Second*1, func() {
-			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
-			err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "wait")
-			if err != nil {
-				log.Print(err)
-			}
-			handleUnknownCommand(bot, update)
-		})
 		return
 	}
 }
