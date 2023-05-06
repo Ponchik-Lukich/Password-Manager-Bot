@@ -76,6 +76,8 @@ func deleteMessage(bot *tgbotapi.BotAPI, chatID int64, messageID int) {
 	deleteConfig := tgbotapi.NewDeleteMessage(chatID, messageID)
 	_, err := bot.DeleteMessage(deleteConfig)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to delete message: %v", err)
+	} else {
+		log.Printf("Message successfully deleted")
 	}
 }

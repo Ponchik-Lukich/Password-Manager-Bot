@@ -28,20 +28,22 @@ func handleGetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		if err != nil {
 			log.Print(err)
 		}
+		handleUnknownCommand(bot, update)
 		return
 	} else {
 		response := fmt.Sprintf("This message would be deleted after minute:\nService: %s\nLogin: %s\nPassword: "+
 			"%s", service.Name, service.Login, service.Password)
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, response)
 		sentMessage, _ := bot.Send(msg)
-		println("Message ID: ", sentMessage.MessageID)
 		time.AfterFunc(time.Minute, func() {
+			println("Deleting: ", sentMessage.MessageID)
 			deleteMessage(bot, update.Message.Chat.ID, sentMessage.MessageID)
 		})
 		err = database.SetUserState(update.Message.Chat.ID, "wait")
 		if err == nil {
 			log.Print(err)
 		}
+		handleUnknownCommand(bot, update)
 		return
 	}
 

@@ -11,7 +11,7 @@ func handleSet(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 	sendMessage(bot, update.CallbackQuery.Message.Chat.ID, "Enter service credentials in format:\n<service name>:<login>:<password>")
 	err := database.SetUserState(update.CallbackQuery.Message.Chat.ID, "set")
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
 	}
 }
 
@@ -23,8 +23,9 @@ func handleSetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 		sendMessage(bot, update.Message.Chat.ID, err.Error())
 		err := database.SetUserState(update.Message.Chat.ID, "wait")
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
 		}
+		handleUnknownCommand(bot, update)
 		return
 	} else {
 		err = database.AddService(service)
@@ -32,15 +33,16 @@ func handleSetService(bot *tgbotapi.BotAPI, update *tgbotapi.Update) {
 			sendMessage(bot, update.Message.Chat.ID, "Error adding service ("+err.Error()+")")
 			err := database.SetUserState(update.Message.Chat.ID, "wait")
 			if err != nil {
-				log.Fatal(err)
+				log.Print(err)
 			}
 			return
 		}
 		sendMessage(bot, update.Message.Chat.ID, "Service added/updated successfully")
 		err := database.SetUserState(update.Message.Chat.ID, "wait")
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
 		}
+		handleUnknownCommand(bot, update)
 		return
 	}
 }
