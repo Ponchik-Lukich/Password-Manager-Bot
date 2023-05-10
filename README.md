@@ -34,7 +34,7 @@ It is deployed on Vercel.
    postgres://username:password@host:port/verceldb
    ```
    
-   To create database for this bot, run the following query in Vercel console:
+   To create database for this bot, run the following query in Vercel console inside `storage` tab:
 
    ```sql
    CREATE TABLE IF NOT EXISTS users
