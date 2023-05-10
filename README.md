@@ -4,7 +4,7 @@ A simple bot for Telegram that helps manage passwords efficiently.
 
 Link to the bot: https://t.me/password_managment_bot
 
-It is deployed on Vercel.
+It is deployed on Vercel as serverless function so the code was not parallelized because Vercel does it itself.
 
 ## Deploying the bot on Vercel
 
@@ -81,6 +81,19 @@ It is deployed on Vercel.
    ```
 
    Bot should now be running on Vercel!
+
+## Local start
+
+1. Clone the repository to your local machine.
+
+2. In the project root directory, create a `.env` file and add the following environment variables:
+
+   ```
+   TELEGRAM_BOT_TOKEN=<your-bot-token>
+   ENCRYPT_KEY=<your-encription-key>
+   ```
+
+3. Run `docker-compose up --build` to run it in docker.
 
 ## Usage
 

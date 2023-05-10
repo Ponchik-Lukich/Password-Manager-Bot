@@ -1,0 +1,1 @@
+ALTER TABLE services DROP CONSTRAINT IF EXISTS unique_name_user_chat_id;

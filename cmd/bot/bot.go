@@ -44,3 +44,24 @@ func RunBot(botToken string, w http.ResponseWriter, r *http.Request) {
 
 	handlers.HandleUpdate(bot, &update)
 }
+
+func RunBotLocal(botToken string) {
+	bot, err := tgbotapi.NewBotAPI(botToken)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+
+	updates, err := bot.GetUpdatesChan(u)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for update := range updates {
+		handlers.HandleUpdate(bot, &update)
+	}
+}
